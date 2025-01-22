@@ -1,0 +1,31 @@
+server:
+  listen: 8080
+  workers: 4
+
+  upstreams:
+    - id: upstream1
+      url: localhost:8001
+
+    - id: upstream2
+      url: localhost:8002
+
+    - id: upstream3
+      url: localhost:8003
+
+  headers:
+    - key: x-forward-for
+      value: '$ip'
+
+    - key: Authorization
+      value: 'Bearer xyz'
+
+  rules:
+    - path: /
+      upstreams:
+          - upstream1
+          - upstream2
+          - upstream3
+
+    - path: /admin
+      upstreams:
+        - upstream3
